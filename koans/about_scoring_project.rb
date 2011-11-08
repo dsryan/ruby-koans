@@ -31,6 +31,34 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 
 def score(dice)
   # You need to write this method
+  return 0 if dice.empty?
+  tally_hash = dice.inject({}) { | tally, die |
+    if tally[die] then
+      tally[die] += 1
+    else 
+      tally[die] = 1
+    end
+    tally
+  }
+  
+  scores = tally_hash.map do |hash|
+    score = 0
+    if hash[1] >= 3 then
+      remainder = hash[1] - 3
+      if hash[0] != 1 then
+        score = hash[0] * 100
+        score += (remainder * 50) if hash[0] == 5
+      elsif
+        score = 1000 + (remainder * 100)
+      end
+    else
+      score = 100 * hash[1] if hash[0] == 1
+      score = 50 * hash[1] if hash[0] == 5
+    end
+    score
+  end
+  
+  return scores.inject() { |sum , score| sum += score }  
 end
 
 class AboutScoringProject < EdgeCase::Koan
